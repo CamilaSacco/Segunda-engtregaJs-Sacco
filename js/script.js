@@ -1,92 +1,73 @@
+let botonCompra = document.getElementsByClassName("botonCompra");
 
+for ( let boton of botonCompra){
+    boton.addEventListener("click" , agregar_al_carrito);
 
-class producto{ 
-    constructor(actividad ,lugares, precio, cupos ){
-        this.actividad = actividad;
-        this.lugares = lugares;
-        this.precio = precio;
-        this.cupos = cupos;
-    }
-
-    get_datos(){
-        console.log("<--------->");
-        console.log("Actividad: ", this.actividad);
-        console.log("Lugares: ", this.lugares);
-        console.log("Precio: ", this.precio);
-        console.log("Cupos disponibles", this.cupos);
-        console.log("");
-
-    }
-
-    get_lugares(){
-        if(this.cupos <= 0){
-            return false
-        }
-        else{
-            return true
-        }
-    }
-
-
-    venta_lugares(cantidad){
-
-        if(this.cupos >= cantidad){
-        this.cupos = this.cupos - cantidad;
-        return true
-        }  
-        else{
-            return false
-        }
-    }
 }
 
 
 
+let carrito = [];
 
-let lista_productos = [];
+function agregar_al_carrito(e){
 
-lista_productos.push (new producto("Trecking" , "Cerro Tronador" , 3000 , 15));
-lista_productos.push (new producto("Kayak " , "Lago Moreno" , 5000 , 0));
-lista_productos.push (new producto("Paseo " , "Ciudad Historica" , 1500 , 30));
-lista_productos.push (new producto("Visita " , "Parque Nacional Nahuel Huapi" , 3000 , 15));
-lista_productos.push (new producto("Bicicleta " , "Circuito Chico" , 6000 , 10));
-
-console.log("Lista de productos");
-
-for (let producto of lista_productos){
-    producto.get_datos();
-}
-
-
-function buscar_producto( producto ){
-
-    return producto.actividad == compra_usuario 
-}
-
-let compra_usuario = prompt("Ingrese la actividad que quiere realizar");
-
-let resultado_busqueda = lista_productos.find (buscar_producto);
-
-if (resultado_busqueda != undefined){
-    console.log("Usted eligio la actividad ", compra_usuario);
-
-    if (resultado_busqueda.get_lugares()){
-
-        let cantidad_personas = prompt("Cuantas personas son?");
-        if (resultado_busqueda.venta_lugares(cantidad_personas)){
-            console.log("Gracias por tu compra");
-        }
-
-    }
-    else{
-        console.log("No hay mas cupos disponible para esta actividad");
-    }
-
-    resultado_busqueda.get_datos(); 
+    let hijo = e.target;
+    let padre = hijo.parentNode;
+    let abuelo = padre.parentNode;
     
+
+    let nombre_producto = padre.querySelector("h3").textContent;
+    let precio_producto = padre.querySelector("span").textContent;
+    let img_producto = abuelo.querySelector("img").src;
+    
+
+    let producto = {
+        nombre: nombre_producto,
+        precio: precio_producto,
+        cantidad: 1,
+        img: img_producto
+    };
+
+   
+
+    carrito.push(producto);
+    mostrar_carrito(nombre_producto, precio_producto, img_producto);
+
+
+}
+let tablaCarrito = document.getElementsById("tbody");
+
+function mostrar_carrito(nombre_producto, precio_producto, img_producto){
+    
+    let fila = document.createElement("tr");
+    let contenidoFila = 
+    `<td><img src="${img_producto}"></td>
+    <td><p>${nombre_producto}</p></td>
+    <td>${precio_producto}</td>
+    <td><input type="number"></td>
+    <td><button class="btn btn-danger borrar_elemento">Borrar</button></td>`;
+
+            fila.innerHTML = contenidoFila
+            tablaCarrito.append(fila)
+
 }
 
-else{
-    console.log("No se encontro el producto solicitado, vuelva a intentarlo");
 
-}
+
+
+       
+
+    
+
+
+
+
+
+
+
+
+
+
+
+//calcular el total del carrito
+//guardar en el localstorage lo que se agrego al carrito
